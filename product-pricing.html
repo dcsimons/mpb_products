@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="google-site-verification" content="oaubed02kUhAV0ZC92SUquLKvVuYTfts2jbMQdXip0Y" />
+        <link rel="shortcut icon" type="image/png" href="images/favicon.png">
+        <title>Myopolis</title>
+        <link href="https://fonts.googleapis.com/css?family=Roboto|Montserrat:300,400,500,600,700|Open+Sans:400,300,600" rel="stylesheet">
+        
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
+        <link rel="stylesheet" href="stylesheets/styles.css">
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/ad3b3a21f2.js" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+        <script src="js/typeaheadjs/typeahead.bundle.js"></script>
+    </head>
+    <body class="home-page">
+
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-expand-sm navbar-light mb-3">
+            <div class="container">
+                <a class="navbar-brand" href="/"><img src="images/mpb_logo.png" /></a>
+            </div>
+        </nav>
+
+
+
+        <!-- MAIN CONTENT -->
+        <main>
+            <section class="searchbar">
+                <div class="qty-container">
+                    <span class="qty-title">Qty: </span>
+                    <input id="productQty" type="number" min="1" value="1" />
+                </div>
+                <div class="typeahead-box">
+                    <div id="productSearch">
+                        <input class="typeahead" type="text" placeholder="Product Name">
+                    </div>
+                </div>
+            </section>
+
+            <section class="selection-table">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col"style="width:10%;">Qty</th>
+                            <th scope="col"style="width:65%;">Product</th>
+                            <th scope="col"style="width:10%;">Price</th>
+                            <th scope="col"style="width:10%;">Amount</th>
+                            <th scope="col"style="width:5%;">Rmv</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                            <td></td>
+                            <td class="remove"><i class="fas fa-times"></i></td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Jacob</td>
+                            <td>Thornton</td>
+                            <td></td>
+                            <td class="remove"><i class="fas fa-times"></i></td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Larry</td>
+                            <td>the Bird</td>
+                            <td></td>
+                            <td class="remove"><i class="fas fa-times"></i></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <img class="footer-graphic" src="images/mpb_graphic_white.png" />
+        </footer>
+    </body>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            console.log('hello world');
+
+            var $_table = $('section.selection-table table tbody');
+
+            var productNames = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                prefetch: 'data/products.json',
+                remote: {
+                    url: '/data/%QUERY.json',
+                    wildcard: '%QUERY'
+                }
+            });
+
+            $('#productSearch .typeahead').typeahead(null, {
+                name: 'product-names',
+                display: 'name',
+                source: productNames,
+                templates: {
+                    empty: [
+                        '<div class="empty-message">',
+                        'Unable to find any Products that match the current query',
+                        '</div>'
+                    ].join('\n'),
+                        suggestion: Handlebars.compile('<div><strong>{{name}}</strong> – ${{price}}</div>')
+                }
+            });
+
+            // append selected choice to the selection table
+            $('#productSearch .typeahead').bind('typeahead:select', function(ev, suggestion) {
+                console.log('Selection: ' + suggestion);
+                console.log('Product: ' + suggestion.name);
+                console.log('Price: ' + suggestion.price);
+
+                var $_qty = $('#productQty').val();
+                var num1 = Number($_qty);
+                var num2 = Number(suggestion.price);
+                var amount =  num1 * num2;
+
+                var productRow = '<tr>';
+                productRow += '<td>' + $_qty + '</td>';
+                productRow += '<td>' + suggestion.name + '</td>';
+                productRow += '<td>' + suggestion.price + '</td>';
+                productRow += '<td>' + amount + '</td>';
+                productRow += '<td class="remove"><i class="fas fa-times"></i></td>';
+                productRow += '</tr>';
+
+                $_table.append(productRow);
+            });
+
+            // remove a row from the table
+            $('.remove i').click(function() {
+                $(this).closest('tr').remove();
+            });
+        });
+    </script>
+</html>

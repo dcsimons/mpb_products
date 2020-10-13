@@ -1,0 +1,344 @@
+/* # FLEXBOX
+------------------------------------------------- */
+@mixin prefixFlex($property, $value, $prefixes) {
+    @each $prefix in $prefixes {
+        @if $prefix == webkit {
+             -webkit-#{$property}: $value;
+        } @else if $prefix == moz {
+            -moz-#{$property}: $value;
+        } @else if $prefix == ms {
+            -ms-#{$property}: $value;
+        } @else if $prefix == o {
+            -o-#{$property}: $value;
+        } @else if $prefix == spec {
+            #{$property}: $value;
+        } @else  {
+            @warn 'Unrecognized prefix: #{$prefix}';
+        }
+    }
+}
+
+@mixin display-flexbox() {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%; // necessary for ie10
+}
+
+@mixin flex-wrap($value: nowrap) {
+    @include prefixFlex(flex-wrap, $value, webkit moz ms spec);
+}
+
+@mixin flex-direction($value) {
+    @include prefixFlex(flex-direction, $value, webkit moz ms spec);
+}
+
+@mixin align-items($value: stretch) {
+    $alt-value: $value;
+
+    @if $value == 'flex-start' {
+        $alt-value: start;
+    } @else if $value == 'flex-end' {
+        $alt-value: end;
+    }
+
+    // sass-lint:disable no-misspelled-properties
+    -ms-flex-align: $alt-value;
+    @include prefixFlex(align-items, $value, webkit moz ms o spec);
+}
+
+@mixin flex($value) {
+    @include prefixFlex(flex, $value, webkit moz ms spec);
+}
+
+@mixin flex-basis($width: auto) {
+    // sass-lint:disable no-misspelled-properties
+    -ms-flex-preferred-size: $width;
+    @include prefixFlex(flex-basis, $width, webkit moz spec);
+}
+
+@mixin align-self($align: auto) {
+    // sass-lint:disable no-misspelled-properties
+    -ms-flex-item-align: $align;
+    @include prefixFlex(align-self, $align, webkit spec);
+}
+
+@mixin justify-content($justify: flex-start) {
+    @include prefixFlex(justify-content, $justify, webkit ms spec);
+}
+
+/* # VARIABLES
+------------------------------------------------- */
+$headerfont:        'Montserrat', sans-serif;
+$bodyfont:          'Montserrat', sans-serif;
+
+$white: 			#ffffff;
+$black:             #000000;
+
+$mpb-red:           #ee3648;
+$blue-100:          #7ec5df; // rgba(126, 197, 223, 1)
+$blue-200:          #3493cd; // rgba(52, 147, 205, 1)
+$blue-300:          #1c3664; // rgba(28, 54, 100, 1)
+
+$blue-100-opaque:   rgba(126, 197, 223, 0.25);
+$blue-100-opaque10:   rgba(126, 197, 223, 0.1);
+$blue-200-opaque:   rgba(52, 147, 205, 0.25);
+$blue-300-opaque:   rgba(28, 54, 100, 0.25);
+
+$grey-100:          #e9edf2; // rgba(233, 237, 242, 1)
+$grey-200:          #a6b7bf; // rgba(166, 183, 191, 1)
+$grey-300:          #4c606a; // rgba(76, 96, 106, 1)
+
+$grey-100-opaque:   rgba(233, 237, 242, 0.5);
+$grey-100-opaque30: rgba(233, 237, 242, 0.3);
+$grey-200-opaque:   rgba(166, 183, 191, 0.5);
+$grey-300-opaque:   rgba(76, 96, 106, 0.5);
+$grey-300-opaque67: rgba(76, 96, 106, 0.67);
+
+$bvm-red:           #d04d5d; // rgba(208, 77, 93, 1)
+$bvm-yellow:        #efcc52; // rgba(239, 204, 82, 1)
+$bvm-green:         #60ae7f; // rgba(96, 174, 127, 1)
+
+$bvm-red-opaque:    rgba(208, 77, 93, 0.75);
+$bvm-red-opaque-25: rgba(208, 77, 93, 0.25);
+
+$bvm-yellow-opaque:     rgba(239, 204, 82, 0.75);
+$bvm-yellow-opaque-25:  rgba(239, 204, 82, 0.25);
+
+$bvm-green-opaque:      rgba(96, 174, 127, 0.75);
+$bvm-green-opaque-25:   rgba(96, 174, 127, 0.25);
+
+$primary-text:          $grey-300;
+$primary-text-light:    $grey-200;
+$primary-text-opaque:   $grey-300-opaque67;
+$placeholder-text:      $grey-200;
+$disabled-text:         $grey-300-opaque;
+$bodycolor:             $grey-300;
+$headingtext:           $grey-300;
+$bodytext:              $grey-300;
+$bodybackground:        #f3f5f9; // rgba(243, 245, 249, 1)
+
+
+/* # STYLES
+------------------------------------------------- */
+.home-page {
+    font-family: $bodyfont;
+
+    button:focus {
+        outline: none;
+    }
+
+	nav {
+        background-color: $white;
+		box-shadow: 0.2px 2px 5px 0 rgba(0, 0, 0, 0.25);
+
+		.navbar-brand {
+			img {
+				height: 75px;
+				width: auto;
+			}
+		}
+
+		.navbar-nav {
+			@include align-items(center);
+
+			.nav-item {
+				.nav-link {
+                    color: $blue-300;
+                    font-weight: 500;
+					padding-left: 1rem;
+					padding-right: 1rem;
+
+					&.demo-link {
+						color: $white;
+						background-color: $blue-300;
+						border-radius: 0;
+						padding: 4px 15px;
+						margin-left: 1rem;
+					}
+				}
+			}
+		}
+	}
+
+    main {
+        // margin-top: 66px; // height of navbar -- necessary when navbar fixed at top
+    }
+
+    h1 {
+        color: $blue-300;
+        font-size: 36px;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+    }
+
+    a {
+        &.demo-link {
+            color: $white;
+            background-color: $blue-300;
+            border-radius: 0;
+            padding: 4px 15px;
+            text-decoration: none;
+            margin: 0.5rem;
+
+            &:hover {
+                color: $white;
+                text-decoration: none;
+            }
+        }
+    }
+
+    .left-arrows,
+    .right-arrows {
+        color: $bvm-yellow;
+        font-weight: 600;
+
+        &.blue {
+            color: $blue-100;
+        }
+    }
+
+    .left-arrows {
+        margin-right: 0.5rem;
+    }
+
+    .right-arrows {
+        margin-left: 0.5rem;
+    }
+
+    section.searchbar {
+        padding: 50px 20px 100px 20px;
+
+        .qty-container {
+            @include display-flexbox();
+            @include justify-content(center);
+            margin-bottom: 20px;
+
+            .qty-title {
+                font-size: 24px;
+                font-weight: 600;
+            }
+
+            input {
+                display: inline-block;
+                width: 70px;
+                margin-left: 20px;
+                text-align: center;
+            }
+        }
+
+        .typeahead-box {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto 0 auto;
+            padding: 15px;
+            text-align: left;
+            background-color: $mpb-red;
+            background-image: -moz-linear-gradient(top, $mpb-red, $black);
+            background-image: -webkit-gradient(linear, 0 0, 0 100%, from($mpb-red), to($black));
+            background-image: -webkit-linear-gradient(top, $mpb-red, $black);
+            background-image: -o-linear-gradient(top, $mpb-red, $black);
+            background-image: linear-gradient(top, $mpb-red, $black);
+            background-repeat: repeat-x;
+            border: 1px solid $black;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;
+            -webkit-box-shadow: 0 0 2px #111;
+            -moz-box-shadow: 0 0 2px #111;
+            box-shadow: 0 0 2px #111;
+        }
+
+        .twitter-typeahead {
+            width: 100%;
+
+            .tt-menu {
+                background: $white;
+                width: 100%;
+                padding: 8px 0;
+                border-radius: 8px;
+                border: 1px solid $black;
+
+                .tt-suggestion {
+                    padding: 4px 20px;
+                    font-size: 18px;
+                    line-height: 24px;
+                    cursor: pointer;
+
+                    &.tt-cursor, &:hover, &:focus, &:active {
+                        background: $mpb-red;
+                        color: $white;
+                    }
+                }
+            }
+        }
+
+        input.typeahead {
+            width: 100%;
+            padding: 5px 8px;
+            font-size: 24px;
+            line-height: 30px;
+            border: 1px solid #024e6a;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            border-radius: 8px;
+        }
+    }
+
+    section.selection-table {
+        @include display-flexbox();
+        @include justify-content(center);
+        padding: 0 20px 50px 20px;
+
+        table {
+            width: 100%;
+            max-width: 1000px;
+
+            tr {
+                td {
+                    input {
+                        text-align: center;
+                    }
+
+                    &.remove {
+                        text-align: center;
+
+                        i {
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    footer.footer {
+        @include display-flexbox();
+        @include justify-content(center);
+        padding: 50px 20px;
+        background: $mpb-red;
+
+        img.footer-graphic {
+            width: 80%;
+            max-width: 100px;
+            height: auto;
+        }
+    }
+}
+
+/* MEDIA QUERIES
+------------------------------------------------------ */
+@media (min-width: 992px) {
+    .home-page {
+
+    }
+}
+
+@media (min-width: 1200px) {
+    .home-page {
+
+    }
+}
