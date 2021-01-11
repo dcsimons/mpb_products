@@ -73,8 +73,31 @@
 .home-page .right-arrows {
   margin-left: 0.5rem;
 }
+.home-page section.header {
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  -webkit-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+  -webkit-flex-wrap: wrap;
+  -moz-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding: 24px 20px;
+}
+.home-page section.header img {
+  height: 70px;
+  width: auto;
+  margin-right: 8px;
+}
+.home-page section.header .header-title {
+  font-size: 36px;
+  font-weight: 600;
+}
 .home-page section.searchbar {
-  padding: 50px 20px 100px 20px;
+  padding: 12px 20px 36px 20px;
 }
 .home-page section.searchbar .qty-container {
   display: -webkit-flex;
@@ -93,8 +116,8 @@
 .home-page section.searchbar .qty-container input {
   display: inline-block;
   width: 70px;
-  text-align: center;
   margin-left: 20px;
+  text-align: center;
 }
 .home-page section.searchbar .typeahead-box {
   position: relative;
@@ -158,6 +181,14 @@
   -ms-justify-content: center;
   justify-content: center;
   padding: 0 20px 50px 20px;
+}
+.home-page section.selection-table .dataTables_wrapper {
+  width: 100%;
+  max-width: 1000px;
+}
+
+.home-page section.selection-table .dataTables_wrapper .dt-buttons {
+  float: right;
 }
 .home-page section.selection-table table {
   width: 100%;
