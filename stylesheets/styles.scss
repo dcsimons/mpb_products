@@ -166,7 +166,6 @@ $bodybackground:        #f3f5f9; // rgba(243, 245, 249, 1)
     }
 
     h1 {
-        color: $blue-300;
         font-size: 36px;
         font-weight: 600;
         text-transform: uppercase;
@@ -207,8 +206,26 @@ $bodybackground:        #f3f5f9; // rgba(243, 245, 249, 1)
         margin-left: 0.5rem;
     }
 
+    section.header {
+        @include display-flexbox();
+        @include justify-content(center);
+        @include flex-wrap(wrap);
+        padding: 24px 20px;
+
+        img {
+            height: 70px;
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .header-title {
+            font-size: 36px;
+            font-weight: 600;
+        }
+    }
+
     section.searchbar {
-        padding: 50px 20px 100px 20px;
+        padding: 12px 20px 36px 20px;
 
         .qty-container {
             @include display-flexbox();
@@ -292,6 +309,15 @@ $bodybackground:        #f3f5f9; // rgba(243, 245, 249, 1)
         @include display-flexbox();
         @include justify-content(center);
         padding: 0 20px 50px 20px;
+
+        .dataTables_wrapper {
+            width: 100%;
+            max-width: 1000px;
+
+            .dt-buttons {
+                float: right;
+            }
+        }
 
         table {
             width: 100%;
