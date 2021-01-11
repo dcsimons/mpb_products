@@ -6,18 +6,30 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="google-site-verification" content="oaubed02kUhAV0ZC92SUquLKvVuYTfts2jbMQdXip0Y" />
         <link rel="shortcut icon" type="image/png" href="images/favicon.png">
-        <title>Myopolis</title>
+        <title>MPB Product Pricing</title>
         <link href="https://fonts.googleapis.com/css?family=Roboto|Montserrat:300,400,500,600,700|Open+Sans:400,300,600" rel="stylesheet">
         
+        
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.4/css/buttons.dataTables.min.css">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-        <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
         <link rel="stylesheet" href="stylesheets/styles.css">
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <script src="https://kit.fontawesome.com/ad3b3a21f2.js" crossorigin="anonymous"></script>
         <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        
         <script src="js/typeaheadjs/typeahead.bundle.js"></script>
+
+        <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.6.4/js/dataTables.buttons.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.flash.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.html5.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.print.min.js"></script>
     </head>
     <body class="home-page">
 
@@ -32,6 +44,10 @@
 
         <!-- MAIN CONTENT -->
         <main>
+            <section class="header">
+                <img class="footer-graphic" src="images/mpb_graphic_red.png" />
+                <span class="header-title">Product Pricing</span>
+            </section>
             <section class="searchbar">
                 <div class="qty-container">
                     <span class="qty-title">Qty: </span>
@@ -45,38 +61,18 @@
             </section>
 
             <section class="selection-table">
-                <table class="table">
+                <table id="productTable" class="table">
                     <thead class="thead-dark">
                         <tr>
                             <th scope="col"style="width:10%;">Qty</th>
                             <th scope="col"style="width:65%;">Product</th>
                             <th scope="col"style="width:10%;">Price</th>
                             <th scope="col"style="width:10%;">Amount</th>
-                            <th scope="col"style="width:5%;">Rmv</th>
+                            <th scope="col"style="width:5%;" data-class-name="remove">Rmv</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td></td>
-                            <td class="remove"><i class="fas fa-times"></i></td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td></td>
-                            <td class="remove"><i class="fas fa-times"></i></td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td></td>
-                            <td class="remove"><i class="fas fa-times"></i></td>
-                        </tr>
+                        
                     </tbody>
                 </table>
             </section>
@@ -89,16 +85,25 @@
 
     <script type="text/javascript">
         $(document).ready(function() {
-            console.log('version 1.1');
+            console.log('MPB Product Pricing v1.1');
 
-            var $_table = $('section.selection-table table tbody');
+            var $_table = $('#productTable').DataTable({
+                searching: false,
+                ordering: false,
+                paging: false,
+                info: false,
+                dom: 'Bfrtip',
+                buttons: [
+                    'excel'
+                ]
+            });
 
             var productNames = new Bloodhound({
                 datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
                 queryTokenizer: Bloodhound.tokenizers.whitespace,
-                prefetch: 'data/products.json',
+                prefetch: 'https://dcsimons.github.io/mpb_products/data/products.json',
                 remote: {
-                    url: '/data/%QUERY.json',
+                    url: 'https://dcsimons.github.io/mpb_products/data/%QUERY.json',
                     wildcard: '%QUERY'
                 }
             });
@@ -106,6 +111,7 @@
             $('#productSearch .typeahead').typeahead(null, {
                 name: 'product-names',
                 display: 'name',
+                limit: 10,
                 source: productNames,
                 templates: {
                     empty: [
@@ -128,20 +134,18 @@
                 var num2 = Number(suggestion.price);
                 var amount =  num1 * num2;
 
-                var productRow = '<tr>';
-                productRow += '<td>' + $_qty + '</td>';
-                productRow += '<td>' + suggestion.name + '</td>';
-                productRow += '<td>' + suggestion.price + '</td>';
-                productRow += '<td>' + amount + '</td>';
-                productRow += '<td class="remove"><i class="fas fa-times"></i></td>';
-                productRow += '</tr>';
-
-                $_table.append(productRow);
+                $_table.row.add( [
+                    $_qty,
+                    suggestion.name,
+                    '$' + suggestion.price,
+                    '$' + amount,
+                    '<i class="fas fa-times"></i>'
+                ] ).draw( false );
             });
 
             // remove a row from the table
-            $('.remove i').click(function() {
-                $(this).closest('tr').remove();
+            $(document).on('click', '.remove i', function() {
+                $_table.row( $(this).parents('tr') ).remove().draw();
             });
         });
     </script>
